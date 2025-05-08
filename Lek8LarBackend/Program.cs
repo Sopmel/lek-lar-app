@@ -53,6 +53,10 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<CountGameService>();
 builder.Services.AddScoped<ShapeGameService>();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+
 var app = builder.Build();
 
 // Aktivera Swagger i utvecklingsläge
