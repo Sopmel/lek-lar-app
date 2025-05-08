@@ -10,13 +10,16 @@ import { ShapesGame } from "./pages/Dashboard/Games/MathGames/LevelOne/ShapesGam
 const App = () => {
 
   const onCloseHandler = () => {
-    // Logic to handle closing the modal or performing any other action
     console.log("Modal closed");
   };
+
+  const onSuccessHandler = () => {
+    console.log("Success");
+  }
   return (
 
     <Routes>
-      <Route path="/login" element={<LoginPage onClose={onCloseHandler} />} />
+      <Route path="/login" element={<LoginPage onClose={onCloseHandler} onSuccess={onSuccessHandler} />} />
       <Route path="/register" element={<RegisterPage onClose={onCloseHandler} />} />
       <Route path="/countgame" element={<CountGame />} />
       <Route path="/shapes" element={<ShapesGame />} />

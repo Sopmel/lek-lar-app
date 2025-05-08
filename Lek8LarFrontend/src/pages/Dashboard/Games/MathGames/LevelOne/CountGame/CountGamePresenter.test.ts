@@ -1,5 +1,5 @@
-import { CountGamePresenter } from "./CountGamePresenter";
-import { authService } from "../../../../../services/AuthService";
+
+import { authService } from "../../../../../../services/AuthService";
 
 jest.mock("../../services/AuthService");
 

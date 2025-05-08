@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input, Card, Flex, Typography } from "antd";
+import { Button, Input, Flex, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { registerPresenter } from "./RegisterPresenter";
 import { SmileOutlined, CloseOutlined } from "@ant-design/icons"; // Ikoner
