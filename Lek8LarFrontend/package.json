@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/jest": "^29.5.14",
-    "@types/node": "^16.0.0",
+    "@types/node": "^20.0.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
@@ -40,5 +40,10 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
-  }
+  },
+  "description": "Ett lekfullt inlärningsspel byggt med React (frontend) och .NET C# (backend). Projektet är en del av ett examensarbete.",
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
