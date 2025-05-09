@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
 import { Flex, Card } from "../../components/LekLarComponentLibrary";
 import { Modal } from "../../components/Modal/Modal";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
-import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-
+    const location = useLocation();
     const navigate = useNavigate();
+
+    const isLoginOpen = location.pathname === "/login";
+    const isRegisterOpen = location.pathname === "/register";
 
     const buttonBase: React.CSSProperties = {
         width: "100%",
@@ -35,7 +35,11 @@ const HomePage = () => {
                 }}
             >
                 <Card
-                    title={<h1 style={{ margin: 0, fontSize: "2.5rem", color: "#222" }}>Välkommen! <span role="img" aria-label="vinka">👋</span></h1>}
+                    title={
+                        <h1 style={{ margin: 0, fontSize: "2.5rem", color: "#222" }}>
+                            Välkommen! <span role="img" aria-label="vinka">👋</span>
+                        </h1>
+                    }
                     headStyle={{ backgroundColor: "#ffc0cb", textAlign: "center", borderRadius: "12px 12px 0 0" }}
                     style={{
                         backgroundColor: "#fff",
@@ -47,12 +51,13 @@ const HomePage = () => {
                     <Flex justify="space-between" align="center" gap={50} style={{ flexWrap: "wrap" }}>
                         <section style={{ flex: 1, minWidth: 280 }}>
                             <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>
-                                Välkommen till <strong>LEK&LÄR</strong> – en rolig inlärningsplattform där barn får träna matte, språk och logik genom lek.<br />
+                                Välkommen till <strong>LEK&LÄR</strong> – en rolig inlärningsplattform där barn får
+                                träna matte, språk och logik genom lek.<br />
                                 Välj att logga in eller registrera dig för att börja spela!
                             </p>
                         </section>
 
-                        <section aria-label="Login and registration" style={{ flex: 1, minWidth: 280 }}>
+                        <section style={{ flex: 1, minWidth: 280 }}>
                             <Card
                                 style={{
                                     textAlign: "center",
@@ -69,7 +74,7 @@ const HomePage = () => {
                                         color: "white",
                                         marginBottom: "16px",
                                     }}
-                                    onClick={() => setIsLoginOpen(true)}
+                                    onClick={() => navigate("/login")}
                                 >
                                     Logga in
                                 </button>
@@ -81,7 +86,7 @@ const HomePage = () => {
                                         color: "#333",
                                         border: "1px solid #ffb6c1",
                                     }}
-                                    onClick={() => setIsRegisterOpen(true)}
+                                    onClick={() => navigate("/register")}
                                 >
                                     Registrera
                                 </button>
@@ -91,18 +96,15 @@ const HomePage = () => {
                 </Card>
             </main>
 
-            <Modal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} title="Logga in">
+            <Modal open={isLoginOpen} onClose={() => navigate("/")} title="Logga in">
                 <LoginPage
-                    onClose={() => setIsLoginOpen(false)}
-                    onSuccess={() => {
-                        setIsLoginOpen(false);
-                        navigate("/dashboard");
-                    }}
+                    onClose={() => navigate("/")}
+                    onSuccess={() => navigate("/dashboard")}
                 />
             </Modal>
 
-            <Modal open={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} title="Registrera">
-                <RegisterPage onClose={() => setIsRegisterOpen(false)} />
+            <Modal open={isRegisterOpen} onClose={() => navigate("/")} title="Registrera">
+                <RegisterPage onClose={() => navigate("/")} />
             </Modal>
         </PageLayout>
     );

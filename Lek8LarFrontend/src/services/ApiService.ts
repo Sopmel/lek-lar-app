@@ -7,6 +7,9 @@ class ApiService {
             : process.env.REACT_APP_API_URL;
 
     async post(endpoint: string, data?: any, config?: AxiosRequestConfig) {
+        console.log("NODE_ENV:", process.env.NODE_ENV);
+
+
         console.log("POST to:", `${this.BASE_URL}/${endpoint}`);
         const response = await axios.post(`${this.BASE_URL}/${endpoint}`, data, config);
         return response.data;

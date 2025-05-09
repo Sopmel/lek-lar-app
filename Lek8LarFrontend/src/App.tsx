@@ -1,32 +1,22 @@
-import { Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import { CountGame } from "./pages/Dashboard/Games/MathGames/LevelOne/CountGame/CountGame";
 import { ShapesGame } from "./pages/Dashboard/Games/MathGames/LevelOne/ShapesGame/ShapesGame";
 
 const App = () => {
-
-  const onCloseHandler = () => {
-    console.log("Modal closed");
-  };
-
-  const onSuccessHandler = () => {
-    console.log("Success");
-  }
   return (
-
-    <Routes>
-      <Route path="/login" element={<LoginPage onClose={onCloseHandler} onSuccess={onSuccessHandler} />} />
-      <Route path="/register" element={<RegisterPage onClose={onCloseHandler} />} />
-      <Route path="/countgame" element={<CountGame />} />
-      <Route path="/shapes" element={<ShapesGame />} />
-      <Route path="/" element={<HomePage />} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-    </Routes>
-
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<HomePage />} />
+        <Route path="/register" element={<HomePage />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/countgame" element={<CountGame />} />
+        <Route path="/shapes" element={<ShapesGame />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
