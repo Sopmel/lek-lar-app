@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
-    readonly BASE_URL = process.env.REACT_APP_API_URL;
+    readonly BASE_URL = process.env.REACT_APP_API_URL || "https://lek8lar-backend.onrender.com";
+
 
 
     async post(endpoint: string, data?: any, config?: AxiosRequestConfig) {
