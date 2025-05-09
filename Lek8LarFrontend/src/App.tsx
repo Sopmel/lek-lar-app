@@ -7,16 +7,16 @@ import { ShapesGame } from "./pages/Dashboard/Games/MathGames/LevelOne/ShapesGam
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<HomePage />} />
-        <Route path="/register" element={<HomePage />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/countgame" element={<CountGame />} />
-        <Route path="/shapes" element={<ShapesGame />} />
-      </Routes>
-    </BrowserRouter>
+
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<HomePage />} />
+      <Route path="/register" element={<HomePage />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/countgame" element={<CountGame />} />
+      <Route path="/shapes" element={<ShapesGame />} />
+    </Routes>
+
   );
 };
 

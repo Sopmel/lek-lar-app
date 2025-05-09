@@ -2,9 +2,10 @@ import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
     readonly BASE_URL =
-        process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_API_URL_LOCAL
-            : process.env.REACT_APP_API_URL;
+        import.meta.env.MODE === "development"
+            ? import.meta.env.VITE_API_URL_LOCAL
+            : import.meta.env.VITE_API_URL;
+
 
     async post(endpoint: string, data?: any, config?: AxiosRequestConfig) {
         console.log("NODE_ENV:", process.env.NODE_ENV);
