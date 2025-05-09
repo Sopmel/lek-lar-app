@@ -8,7 +8,7 @@ class ApiService {
 
 
     async post(endpoint: string, data?: any, config?: AxiosRequestConfig) {
-        console.log("NODE_ENV:", process.env.NODE_ENV);
+        console.log("NODE_ENV:", import.meta.env.VITE_API_URL_LOCALL);
 
 
         console.log("POST to:", `${this.BASE_URL}/${endpoint}`);
