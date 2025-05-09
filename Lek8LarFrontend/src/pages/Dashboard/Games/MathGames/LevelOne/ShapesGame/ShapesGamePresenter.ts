@@ -1,6 +1,11 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
 
+const BASE_URL =
+    import.meta.env.MODE === "development"
+        ? "http://localhost:5000/api"
+        : "https://lek8lar-backend.onrender.com/api";
+
 export type ShapeQuestion = {
     id: number;
     shapeImageUrl: string;
@@ -30,7 +35,7 @@ export class ShapesGamePresenter {
 
     async startGame() {
         try {
-            const res = await axios.post("http://localhost:5000/api/ShapeGame/start");
+            const res = await axios.post(`${BASE_URL}/ShapeGame/start`);
             runInAction(() => {
                 this.sessionId = res.data.sessionId;
             });
@@ -42,10 +47,9 @@ export class ShapesGamePresenter {
 
     async fetchQuestion() {
         try {
-            const res = await axios.get(`http://localhost:5000/api/ShapeGame/question`, {
-                params: { sessionId: this.sessionId }
+            const res = await axios.get(`${BASE_URL}/ShapeGame/question`, {
+                params: { sessionId: this.sessionId },
             });
-            console.log("Fråga från backend:", res.data);
 
             runInAction(() => {
                 if (res.data.gameOver) {
@@ -63,10 +67,10 @@ export class ShapesGamePresenter {
         if (!this.question) return;
 
         try {
-            const res = await axios.post("http://localhost:5000/api/ShapeGame/answer", {
+            const res = await axios.post(`${BASE_URL}/ShapeGame/answer`, {
                 questionId: this.question.id,
                 answer,
-                sessionId: this.sessionId
+                sessionId: this.sessionId,
             });
 
             runInAction(() => {
