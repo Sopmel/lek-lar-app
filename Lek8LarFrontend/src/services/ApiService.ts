@@ -6,20 +6,14 @@ class ApiService {
             ? import.meta.env.VITE_API_URL_LOCAL
             : import.meta.env.VITE_API_URL;
 
-
     async post(endpoint: string, data?: any, config?: AxiosRequestConfig) {
-        console.log("NODE_ENV:", import.meta.env.VITE_API_URL_LOCALL);
-
-
         console.log("POST to:", `${this.BASE_URL}/${endpoint}`);
-        const response = await axios.post(`${this.BASE_URL}/${endpoint}`, data, config);
-        return response.data;
+        return (await axios.post(`${this.BASE_URL}/${endpoint}`, data, config)).data;
     }
 
     async get(endpoint: string, params?: Record<string, string>) {
         console.log("GET from:", `${this.BASE_URL}/${endpoint}`);
-        const response = await axios.get(`${this.BASE_URL}/${endpoint}`, { params });
-        return response.data;
+        return (await axios.get(`${this.BASE_URL}/${endpoint}`, { params })).data;
     }
 }
 
