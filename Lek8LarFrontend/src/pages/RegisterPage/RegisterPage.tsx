@@ -27,6 +27,8 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onClose }) => {
             }
         } catch {
             alert("Något gick fel vid registreringen.");
+            console.log("API URL:", process.env.REACT_APP_API_URL);
+
         }
     };
 
