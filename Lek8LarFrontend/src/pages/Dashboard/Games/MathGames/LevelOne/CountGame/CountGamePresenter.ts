@@ -94,12 +94,13 @@ export class CountGamePresenter {
             console.error("Kunde inte starta spelet:", error);
         }
     }
+
     async fetchQuestion(): Promise<void> {
         if (!this.sessionId) return;
 
         try {
             this.isLoading = true;
-            const res = await apiService.get("CountGame/question", { sessionId: this.sessionId })
+            const res = await apiService.get("CountGame/question", { sessionId: this.sessionId });
 
             this.isLoading = false;
 
@@ -115,15 +116,15 @@ export class CountGamePresenter {
         }
     }
 
-
     async submitAnswer(answer: number): Promise<void> {
         if (!this.sessionId) return;
 
         try {
-            const res: AnswerResponse = await apiService.post(`CountGame/answer?sessionId=${this.sessionId}`, { answer }, {
-                headers: { "Content-Type": "application/json" }
-            });
-
+            const res: AnswerResponse = await apiService.post(
+                "CountGame/answer",
+                { sessionId: this.sessionId, answer },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             if (res.gameOver) {
                 this.gameOver = true;
@@ -143,5 +144,4 @@ export class CountGamePresenter {
     private isGameResult(res: any): res is GameResult {
         return typeof res.gameOver === "boolean" && typeof res.stars === "number";
     }
-
 }
