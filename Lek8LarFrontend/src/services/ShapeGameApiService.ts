@@ -1,22 +1,23 @@
-import { apiService } from "../services/ApiService";
+import { apiService } from "./ApiService";
 import { ShapeQuestion, GameResult } from "../pages/Dashboard/Games/MathGames/LevelOne/ShapesGame/ShapesGameTypes";
 
 export class ShapeGameApiService {
-    async startGame(): Promise<{ sessionId: string }> {
-        return apiService.post("ShapeGame/start", {});
+    public async startGame(level: number): Promise<{ sessionId: string }> {
+        return apiService.post(`shapesgame/start?level=${level}`);
     }
 
-    async fetchQuestion(sessionId: string): Promise<ShapeQuestion | GameResult> {
-        return apiService.get("ShapeGame/question", { sessionId });
-    }
-
-    async submitAnswer(
-        questionId: number, answer: string, sessionId: string
-    ): Promise<{ correct: boolean; gameOver: boolean; stars: number }> {
-        return apiService.post("ShapeGame/answer", {
+    public async fetchQuestion(sessionId: string, level: number): Promise<ShapeQuestion | GameResult> {
+        return apiService.get("shapesgame/question", {
             sessionId,
+            level: level.toString(),
+        });
+    }
+
+    public async submitAnswer(questionId: number, answer: string, sessionId: string): Promise<{ correct: boolean; gameOver: boolean; stars: number }> {
+        return apiService.post("shapesgame/answer", {
             questionId,
             answer,
+            sessionId,
         });
     }
 }

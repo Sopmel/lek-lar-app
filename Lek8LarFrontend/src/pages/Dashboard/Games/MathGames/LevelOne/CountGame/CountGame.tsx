@@ -3,9 +3,11 @@ import { CountGamePresenter } from "./CountGamePresenter";
 import { usePresenter } from "../../../../../../hooks/usePresenter";
 import { Card, Flex, GameButton, Title, Text } from "../../../../../../components/LekLarComponentLibrary";
 import { PageLayout } from "../../../../../../components/PageLayout/PageLayout";
+import { useNavigate } from "react-router-dom";
 
 export const CountGame = observer(() => {
     const presenter = usePresenter(CountGamePresenter);
+    const navigate = useNavigate();
     const { question } = presenter;
     const vm = presenter.viewModel;
 
@@ -16,6 +18,15 @@ export const CountGame = observer(() => {
                     <Title level="2" title={vm.stars.fiveStarText} />
                     <Text text={vm.stars.starText} />
                     {vm.isPerfect && <Text text={vm.game.finnishedLevelText} />}
+                    <Flex justify="center" style={{ marginTop: 24, gap: 16 }}>
+                        <GameButton onClick={() => navigate("/dashboard")}>
+                            {vm.backToDashboardSymbol}
+                        </GameButton>
+                        <GameButton onClick={() => presenter.startGame()}>
+                            {vm.playAgainSymbol}
+                        </GameButton>
+                        <GameButton onClick={() => navigate("/math")}>{vm.nextGameSymbol}</GameButton>
+                    </Flex>
                 </Card>
             </PageLayout>
         );

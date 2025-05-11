@@ -3,9 +3,11 @@ import { ShapesGamePresenter } from "./ShapesGamePresenter";
 import { Card, GameButton, Flex, Text, Title } from "../../../../../../components/LekLarComponentLibrary";
 import { PageLayout } from "../../../../../../components/PageLayout/PageLayout";
 import { usePresenter } from "../../../../../../hooks/usePresenter";
+import { useNavigate } from "react-router-dom";
 
 export const ShapesGame = observer(() => {
     const presenter = usePresenter(ShapesGamePresenter);
+    const navigate = useNavigate();
     const { question } = presenter;
     const vm = presenter.viewModel;
     if (!vm) return null;
@@ -17,6 +19,15 @@ export const ShapesGame = observer(() => {
                     <Title level="2" title={vm.stars.fiveStarText} />
                     <Text text={vm.stars.starText} />
                     {vm.isPerfect && <Text text={vm.game.finnishedLevelText} />}
+                    <Flex justify="center" style={{ marginTop: 24, gap: 16 }}>
+                        <GameButton onClick={() => navigate("/dashboard")}>
+                            {vm.backToDashboardSymbol}
+                        </GameButton>
+                        <GameButton onClick={() => presenter.startGame()}>
+                            {vm.playAgainSymbol}
+                        </GameButton>
+                        <GameButton onClick={() => navigate("/math")}>{vm.nextGameSymbol}</GameButton>
+                    </Flex>
                 </Card>
             </PageLayout>
         );

@@ -10,5 +10,6 @@ export type ShapeQuestion = {
 export type GameResult = {
     gameOver: boolean;
     stars: number;
+    level: number;
     levelCleared: boolean;
 };

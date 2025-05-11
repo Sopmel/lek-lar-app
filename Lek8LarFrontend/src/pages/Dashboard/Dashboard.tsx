@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useInjection } from "inversify-react";
 import { GameProgressManager } from "../Dashboard/Services/GameProgressManager/GameProgressManager";
+import { DashboardPresenter } from "./DashboardPresenter";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
 import { AccessibleCard, Card, GameRow } from "../../components/LekLarComponentLibrary";
+import { usePresenter } from "../../hooks/usePresenter";
 
 
 
 const Dashboard = () => {
+    const presenter = usePresenter(DashboardPresenter);
+    const vm = presenter.viewModel;
     const navigate = useNavigate();
     const progress = useInjection<GameProgressManager>(GameProgressManager);
     const countGameStars = progress.getStars("CountGame", 1) ?? 0;
@@ -15,8 +19,8 @@ const Dashboard = () => {
 
     return (
         <PageLayout>
-            <Card title="🎮 Välj ett spel">
-                <GameRow title="➕ Matte – Nivå 1" backgroundColor="#ffe6f0">
+            <Card title={vm.cardTitle}>
+                <GameRow title={vm.mathGameRowTitle} backgroundColor="#ffe6f0">
 
                     <AccessibleCard
                         hoverable
@@ -29,7 +33,7 @@ const Dashboard = () => {
                     <AccessibleCard
                         hoverable
                         title="⭐ Formjakten"
-                        description="Gissa rätt form på bilden."
+                        description={`Stjärnor: ${"⭐".repeat(countGameStars).padEnd(5, "☆")}`}
                         onClick={() => navigate("/shapes")}
                         style={{ width: 240, minHeight: 180 }}
                     />
@@ -43,7 +47,7 @@ const Dashboard = () => {
 
                 </GameRow>
 
-                <GameRow title="🔤 ABC – Nivå 1" backgroundColor="#e0f7ff">
+                <GameRow title={vm.ABCGameRowTitle} backgroundColor="#e0f7ff">
 
                     <AccessibleCard
                         hoverable
@@ -69,7 +73,7 @@ const Dashboard = () => {
 
                 </GameRow>
 
-                <GameRow title="🧠 Memory – Nivå 1" backgroundColor="#e0ffe0">
+                <GameRow title={vm.memoryGameRowTitle} backgroundColor="#e0ffe0">
 
                     <AccessibleCard
                         hoverable

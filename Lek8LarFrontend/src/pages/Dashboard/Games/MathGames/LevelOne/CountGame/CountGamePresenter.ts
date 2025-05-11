@@ -22,7 +22,10 @@ export interface CountGameViewModel {
         starText: string;
         fiveStarText: string;
         starCount: number;
-    }
+    };
+    backToDashboardSymbol: string;
+    playAgainSymbol: string;
+    nextGameSymbol: string;
     isPerfect: boolean;
     isLoading: boolean;
     isLoadingMessage: string;
@@ -89,6 +92,9 @@ export class CountGamePresenter {
                 fiveStarText: "Du fick 5 stjärnor:",
                 starCount: this.stars,
             },
+            backToDashboardSymbol: "↩️",
+            playAgainSymbol: "🔄",
+            nextGameSymbol: "➡️",
             isPerfect: this.stars === 5,
             isLoading: this.isLoading,
             isLoadingMessage: "Laddar...",
@@ -96,6 +102,12 @@ export class CountGamePresenter {
     }
 
     public async startGame(): Promise<void> {
+        this.gameOver = false;
+        this.stars = 0;
+        this.feedback = "";
+        this.question = null;
+        this.isLoading = true;
+
         try {
             const res = await this.countGameApiService.startGame(this.level);
             this.sessionId = res.sessionId;
@@ -105,6 +117,7 @@ export class CountGamePresenter {
             this.isLoading = false;
         }
     }
+
 
     public async submitAnswer(answer: number): Promise<void> {
         if (!this.sessionId) return;
