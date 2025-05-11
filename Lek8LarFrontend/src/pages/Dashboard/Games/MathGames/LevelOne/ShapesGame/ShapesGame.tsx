@@ -13,10 +13,10 @@ export const ShapesGame = observer(() => {
     if (presenter.gameOver) {
         return (
             <PageLayout>
-                <Card title="🎉 Spelet är klart!" headerBgColor="pink">
-                    <Title level="2" title={vm.fiveStarText} />
-                    <Text text={vm.starText} />
-                    {vm.isPerfect && <Text text={vm.finnishedLevelText} />}
+                <Card title={vm.cardTitle} headerBgColor="pink">
+                    <Title level="2" title={vm.stars.fiveStarText} />
+                    <Text text={vm.stars.starText} />
+                    {vm.isPerfect && <Text text={vm.game.finnishedLevelText} />}
                 </Card>
             </PageLayout>
         );
@@ -34,7 +34,7 @@ export const ShapesGame = observer(() => {
     return (
         <PageLayout>
             <Flex justify="center" align="center" style={{ padding: "32px 0" }}>
-                <Card title={vm.gameTitle} headerBgColor="pink">
+                <Card title={vm.game.gameTitle} headerBgColor="pink">
                     <Flex justify="center" style={{ marginBottom: 32 }}>
                         <img
                             src={`images/gameImages/shapes/${question.shapeImageUrl}`}
@@ -50,7 +50,7 @@ export const ShapesGame = observer(() => {
                             </GameButton>
                         ))}
                     </Flex>
-                    {vm.feedback && <Text text={vm.feedback} />}
+                    {vm.game.feedback && <Text text={vm.game.feedback} />}
                 </Card>
             </Flex>
         </PageLayout>

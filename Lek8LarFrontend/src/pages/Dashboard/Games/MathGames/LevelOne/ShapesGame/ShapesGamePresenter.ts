@@ -6,17 +6,24 @@ import { ShapeQuestion, GameResult } from "./ShapesGameTypes";
 export interface ShapeGameViewModel {
     imageUrl: string;
     options: string[];
-    gameTitle: string;
-    starText: string;
-    fiveStarText: string;
-    finnishedLevelText: string;
-    starCount: number;
+    cardTitle: string
+    game: {
+        gameTitle: string;
+        correctText: string;
+        incorrectText: string;
+        finnishedLevelText: string;
+        feedback: string;
+    }
+    stars: {
+        starText: string;
+        fiveStarText: string;
+        starCount: number;
+    }
     isPerfect: boolean;
     isLoading: boolean;
     isLoadingMessage: string;
-    feedback: string;
-    correctText: string;
-    incorrectText: string;
+
+
 }
 
 @injectable()
@@ -52,17 +59,22 @@ export class ShapesGamePresenter {
         return {
             imageUrl: `images/gameImages/${this.question?.shapeImageUrl}`,
             options: this.question?.options ?? [],
-            gameTitle: "🔷 Vilken form är detta?",
-            starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
-            fiveStarText: "Du fick 5 stjärnor:",
-            finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
-            starCount: this.stars,
+            cardTitle: "🎉 Spelet är klart!",
+            game: {
+                gameTitle: "🔷 Vilken form är detta?",
+                correctText: "🎉 Rätt!",
+                incorrectText: "❌ Fel, försök igen!",
+                finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
+                feedback: this.feedback,
+            },
+            stars: {
+                starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
+                fiveStarText: "Du fick 5 stjärnor:",
+                starCount: this.stars,
+            },
             isPerfect: this.stars === 5,
             isLoading: this.isLoading,
             isLoadingMessage: "Laddar fråga...",
-            feedback: this.feedback,
-            correctText: "🎉 Rätt!",
-            incorrectText: "❌ Fel, försök igen!",
         };
     }
 
@@ -104,8 +116,8 @@ export class ShapesGamePresenter {
             );
 
             this.feedback = res.correct
-                ? this.viewModel?.correctText ?? ""
-                : this.viewModel?.incorrectText ?? "";
+                ? this.viewModel?.game.correctText ?? ""
+                : this.viewModel?.game.incorrectText ?? "";
 
             this.stars = res.stars;
             if (res.gameOver) {

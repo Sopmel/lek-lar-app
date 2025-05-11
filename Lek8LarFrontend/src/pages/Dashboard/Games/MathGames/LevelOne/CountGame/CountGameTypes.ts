@@ -10,6 +10,7 @@ export type Question = {
 export type GameResult = {
     gameOver: boolean;
     stars: number;
+    level: number;
     levelCleared: boolean;
 };
 

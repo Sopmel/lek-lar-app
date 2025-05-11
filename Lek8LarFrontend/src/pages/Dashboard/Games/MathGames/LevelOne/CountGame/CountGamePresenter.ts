@@ -5,25 +5,33 @@ import {
     Question,
     GameResult,
 } from "./CountGameTypes";
+import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 
 export interface CountGameViewModel {
     imageElements: { key: number; src: string; alt: string }[];
     options: number[];
-    gameTitle: string;
-    starText: string;
-    fiveStarText: string;
-    finnishedLevelText: string;
-    starCount: number;
+    cardTitle: string
+    game: {
+        gameTitle: string;
+        correctText: string;
+        incorrectText: string;
+        finnishedLevelText: string;
+        feedback: string;
+    }
+    stars: {
+        starText: string;
+        fiveStarText: string;
+        starCount: number;
+    }
     isPerfect: boolean;
     isLoading: boolean;
     isLoadingMessage: string;
-    feedback: string;
-    correctText: string;
-    incorrectText: string;
+
 }
 
 @injectable()
 export class CountGamePresenter {
+    level: number = 1;
     sessionId: string | null = null;
     question: Question | null = null;
     feedback: string = "";
@@ -32,9 +40,14 @@ export class CountGamePresenter {
     isLoading: boolean = true;
 
     constructor(
-        @inject(CountGameApiService) private countGameApiService: CountGameApiService
+        @inject(CountGameApiService)
+        private countGameApiService: CountGameApiService,
+
+        @inject(GameProgressManager)
+        private gameProgressManager: GameProgressManager
     ) {
         makeObservable(this, {
+            level: observable,
             sessionId: observable,
             question: observable,
             feedback: observable,
@@ -63,42 +76,55 @@ export class CountGamePresenter {
                 alt: `objekt: ${safeImageUrl.split(".")[0]}`,
             })),
             options: options ?? [],
-            gameTitle: "🧮 Hur många ser du?",
-            starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
-            fiveStarText: "Du fick 5 stjärnor:",
-            finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
-            starCount: this.stars,
+            cardTitle: "🎉 Spelet är klart!",
+            game: {
+                gameTitle: "🧮 Hur många ser du?",
+                correctText: "🎉 Rätt!",
+                incorrectText: "❌ Fel, försök igen!",
+                finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
+                feedback: this.feedback,
+            },
+            stars: {
+                starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
+                fiveStarText: "Du fick 5 stjärnor:",
+                starCount: this.stars,
+            },
             isPerfect: this.stars === 5,
             isLoading: this.isLoading,
             isLoadingMessage: "Laddar...",
-            feedback: this.feedback,
-            correctText: "🎉 Rätt!",
-            incorrectText: "❌ Fel, försök igen!",
         };
     }
 
     public async startGame(): Promise<void> {
         try {
-            const res = await this.countGameApiService.startGame();
+            const res = await this.countGameApiService.startGame(this.level);
             this.sessionId = res.sessionId;
-            this.fetchQuestion();
+            await this.fetchQuestion();
         } catch (error) {
             console.error("Kunde inte starta spelet:", error);
+            this.isLoading = false;
         }
     }
 
     public async submitAnswer(answer: number): Promise<void> {
         if (!this.sessionId) return;
+
         try {
             const res = await this.countGameApiService.submitAnswer(this.sessionId, answer);
 
             if (res.gameOver) {
                 this.gameOver = true;
                 this.stars = res.stars;
+
+                if ('level' in res && typeof res.level === "number") {
+                    this.level = res.level;
+                }
+                this.gameProgressManager.setStars("CountGame", this.level, res.stars);
             } else {
                 this.feedback = res.correct
-                    ? this.viewModel?.correctText ?? ""
-                    : this.viewModel?.incorrectText ?? "";
+                    ? this.viewModel.game.correctText
+                    : this.viewModel.game.incorrectText;
+
                 setTimeout(() => {
                     this.feedback = "";
                     this.fetchQuestion();
@@ -111,6 +137,7 @@ export class CountGamePresenter {
 
     public async fetchQuestion(): Promise<void> {
         if (!this.sessionId) return;
+
         try {
             this.isLoading = true;
             const res = await this.countGameApiService.fetchQuestion(this.sessionId);
@@ -120,11 +147,16 @@ export class CountGamePresenter {
                 this.gameOver = true;
                 this.stars = res.stars;
                 this.question = null;
+
+                if ('level' in res && typeof res.level === "number") {
+                    this.level = res.level;
+                }
             } else {
                 this.question = res;
             }
         } catch (error) {
             console.error("Kunde inte hämta fråga:", error);
+            this.isLoading = false;
         }
     }
 

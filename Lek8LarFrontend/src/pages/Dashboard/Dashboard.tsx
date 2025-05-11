@@ -1,10 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useInjection } from "inversify-react";
+import { GameProgressManager } from "../Dashboard/Services/GameProgressManager/GameProgressManager";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
 import { AccessibleCard, Card, GameRow } from "../../components/LekLarComponentLibrary";
 
 
+
 const Dashboard = () => {
     const navigate = useNavigate();
+    const progress = useInjection<GameProgressManager>(GameProgressManager);
+    const countGameStars = progress.getStars("CountGame", 1) ?? 0;
+
+
 
     return (
         <PageLayout>
@@ -14,10 +21,11 @@ const Dashboard = () => {
                     <AccessibleCard
                         hoverable
                         title="🔢 Räkna saker"
-                        description="Räkna hur många objekt du ser."
-                        onClick={() => navigate("/countgame")}
+                        description={`Stjärnor: ${"⭐".repeat(countGameStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/countgame?level=1")}
                         style={{ width: 240, minHeight: 180 }}
                     />
+
                     <AccessibleCard
                         hoverable
                         title="⭐ Formjakten"

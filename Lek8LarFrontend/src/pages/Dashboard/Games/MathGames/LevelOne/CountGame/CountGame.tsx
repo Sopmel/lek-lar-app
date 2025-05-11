@@ -12,10 +12,10 @@ export const CountGame = observer(() => {
     if (presenter.gameOver && vm) {
         return (
             <PageLayout>
-                <Card title="🎉 Spelet är klart!" headerBgColor="pink">
-                    <Title level="2" title={vm.fiveStarText} />
-                    <Text text={vm.starText} />
-                    {vm.isPerfect && <Text text={vm.finnishedLevelText} />}
+                <Card title={vm.cardTitle} headerBgColor="pink">
+                    <Title level="2" title={vm.stars.fiveStarText} />
+                    <Text text={vm.stars.starText} />
+                    {vm.isPerfect && <Text text={vm.game.finnishedLevelText} />}
                 </Card>
             </PageLayout>
         );
@@ -32,7 +32,7 @@ export const CountGame = observer(() => {
 
     return (
         <PageLayout>
-            <Card title={vm.gameTitle} headerBgColor="pink">
+            <Card title={vm.game.gameTitle} headerBgColor="pink">
                 <Flex style={{ flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 24 }}>
                     {vm.imageElements.map((img) => (
                         <img key={img.key} src={img.src} alt={img.alt} width={70} style={{ borderRadius: 12 }} />
@@ -45,7 +45,7 @@ export const CountGame = observer(() => {
                         </GameButton>
                     ))}
                 </Flex>
-                {vm.feedback && <Text text={vm.feedback} />}
+                {vm.game.feedback && <Text text={vm.game.feedback} />}
             </Card>
         </PageLayout>
     );
