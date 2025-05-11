@@ -1,10 +1,18 @@
-import React from "react";
+import { GameButton } from "../LekLarComponentLibrary";
+import { useNavigate } from "react-router-dom";
 
 type PageLayoutProps = {
     children: React.ReactNode;
 };
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        navigate("/");
+    };
+
+
     return (
         <div
             style={{
@@ -12,13 +20,20 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
                 display: "flex",
                 justifyContent: "center",
                 overflowY: "auto",
+                position: "relative",
             }}
         >
+            {/* Logga ut-knapp i hörnet */}
+            <div style={{ position: "absolute", top: 16, right: 16 }}>
+                <GameButton onClick={handleLogout} >
+                    Logga ut
+                </GameButton>
+            </div>
+
             <div
                 style={{
                     width: "100%",
                     maxWidth: 960,
-
                 }}
             >
                 <div style={{ textAlign: "center" }}>

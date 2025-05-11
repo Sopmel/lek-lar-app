@@ -16,6 +16,8 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "isolatedModules": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [

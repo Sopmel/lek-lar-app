@@ -1,43 +1,40 @@
 import { makeObservable, observable, computed, action } from "mobx";
-import { apiService } from "../../../../../../services/ApiService";
-
-export type Question = {
-    id: number;
-    objectImageUrl: string;
-    objectCount: number;
-    options: number[];
-    correctAnswer: number;
-    gameResult: GameResult;
-};
-
-type StartGameResponse = { sessionId: string };
-
-export type GameResult = {
-    gameOver: boolean;
-    stars: number;
-    levelCleared: boolean;
-};
-
-type AnswerResponse = {
-    correct: boolean;
-    gameOver: boolean;
-    stars: number;
-};
+import { injectable, inject } from "inversify";
+import { CountGameApiService } from "../../../../../../services/CountGameApiService";
+import {
+    Question,
+    GameResult,
+} from "./CountGameTypes";
+import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 
 export interface CountGameViewModel {
     imageElements: { key: number; src: string; alt: string }[];
     options: number[];
-    gameTitle: string;
-    starText: string;
-    fiveStarText: string;
-    finnishedLevelText: string;
-    starCount: number;
+    cardTitle: string
+    game: {
+        gameTitle: string;
+        correctText: string;
+        incorrectText: string;
+        finnishedLevelText: string;
+        feedback: string;
+    }
+    stars: {
+        starText: string;
+        fiveStarText: string;
+        starCount: number;
+    };
+    backToDashboardSymbol: string;
+    playAgainSymbol: string;
+    nextGameSymbol: string;
     isPerfect: boolean;
     isLoading: boolean;
-    feedback: string;
+    isLoadingMessage: string;
+
 }
 
+@injectable()
 export class CountGamePresenter {
+    level: number = 1;
     sessionId: string | null = null;
     question: Question | null = null;
     feedback: string = "";
@@ -45,8 +42,15 @@ export class CountGamePresenter {
     gameOver: boolean = false;
     isLoading: boolean = true;
 
-    constructor() {
+    constructor(
+        @inject(CountGameApiService)
+        private countGameApiService: CountGameApiService,
+
+        @inject(GameProgressManager)
+        private gameProgressManager: GameProgressManager
+    ) {
         makeObservable(this, {
+            level: observable,
             sessionId: observable,
             question: observable,
             feedback: observable,
@@ -56,81 +60,84 @@ export class CountGamePresenter {
             viewModel: computed,
             startGame: action,
             fetchQuestion: action,
-            submitAnswer: action
+            submitAnswer: action,
         });
 
         this.startGame();
     }
 
-    get viewModel(): CountGameViewModel | null {
-        if (!this.question) return null;
+    get viewModel(): CountGameViewModel {
+        const { objectImageUrl, objectCount, options } = this.question ?? {};
 
-        const { objectImageUrl, objectCount, options } = this.question;
+        const safeImageUrl = objectImageUrl ?? "";
+        const safeObjectCount = objectCount ?? 0;
 
         return {
-            imageElements: Array.from({ length: objectCount }).map((_, i) => ({
+            imageElements: Array.from({ length: safeObjectCount }).map((_, i) => ({
                 key: i,
-                src: `images/gameImages/${objectImageUrl}`,
-                alt: `objekt: ${objectImageUrl.split('.')[0]}`,
+                src: `images/gameImages/${safeImageUrl}`,
+                alt: `objekt: ${safeImageUrl.split(".")[0]}`,
             })),
-            options,
-            gameTitle: "🧮 Hur många ser du?",
-            starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
-            fiveStarText: "Du fick 5 stjärnor:",
-            finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
-            starCount: this.stars,
+            options: options ?? [],
+            cardTitle: "🎉 Spelet är klart!",
+            game: {
+                gameTitle: "🧮 Hur många ser du?",
+                correctText: "🎉 Rätt!",
+                incorrectText: "❌ Fel, försök igen!",
+                finnishedLevelText: "🥳 Superbra jobbat! Du klarade nivå 1!",
+                feedback: this.feedback,
+            },
+            stars: {
+                starText: "⭐".repeat(this.stars).padEnd(5, "☆"),
+                fiveStarText: "Du fick 5 stjärnor:",
+                starCount: this.stars,
+            },
+            backToDashboardSymbol: "↩️",
+            playAgainSymbol: "🔄",
+            nextGameSymbol: "➡️",
             isPerfect: this.stars === 5,
             isLoading: this.isLoading,
-            feedback: this.feedback
+            isLoadingMessage: "Laddar...",
         };
     }
 
-    async startGame(): Promise<void> {
+    public async startGame(): Promise<void> {
+        this.gameOver = false;
+        this.stars = 0;
+        this.feedback = "";
+        this.question = null;
+        this.isLoading = true;
+
         try {
-            const res: StartGameResponse = await apiService.post("CountGame/start?difficulty=easy", {});
+            const res = await this.countGameApiService.startGame(this.level);
             this.sessionId = res.sessionId;
-            this.fetchQuestion();
+            await this.fetchQuestion();
         } catch (error) {
             console.error("Kunde inte starta spelet:", error);
-        }
-    }
-
-    async fetchQuestion(): Promise<void> {
-        if (!this.sessionId) return;
-
-        try {
-            this.isLoading = true;
-            const res = await apiService.get("CountGame/question", { sessionId: this.sessionId });
-
             this.isLoading = false;
-
-            if (this.isGameResult(res)) {
-                this.gameOver = true;
-                this.stars = res.stars;
-                this.question = null;
-            } else {
-                this.question = res;
-            }
-        } catch (error) {
-            console.error("Kunde inte hämta fråga:", error);
         }
     }
 
-    async submitAnswer(answer: number): Promise<void> {
+
+    public async submitAnswer(answer: number): Promise<void> {
         if (!this.sessionId) return;
 
         try {
-            const res: AnswerResponse = await apiService.post(
-                "CountGame/answer",
-                { sessionId: this.sessionId, answer },
-                { headers: { "Content-Type": "application/json" } }
-            );
+            const res = await this.countGameApiService.submitAnswer(this.sessionId, answer);
 
             if (res.gameOver) {
                 this.gameOver = true;
                 this.stars = res.stars;
+
+                if ('level' in res && typeof res.level === "number") {
+                    this.level = res.level;
+                }
+                this.gameProgressManager.setStars("CountGame", this.level, res.stars);
             } else {
-                this.feedback = res.correct ? "🎉 Rätt!" : "❌ Fel, försök igen!";
+                this.feedback = res.correct
+                    ? this.viewModel.game.correctText
+                    : this.viewModel.game.incorrectText;
+
                 setTimeout(() => {
                     this.feedback = "";
                     this.fetchQuestion();
@@ -138,6 +145,31 @@ export class CountGamePresenter {
             }
         } catch (error) {
             console.error("Fel vid svar:", error);
+        }
+    }
+
+    public async fetchQuestion(): Promise<void> {
+        if (!this.sessionId) return;
+
+        try {
+            this.isLoading = true;
+            const res = await this.countGameApiService.fetchQuestion(this.sessionId);
+            this.isLoading = false;
+
+            if (this.isGameResult(res)) {
+                this.gameOver = true;
+                this.stars = res.stars;
+                this.question = null;
+
+                if ('level' in res && typeof res.level === "number") {
+                    this.level = res.level;
+                }
+            } else {
+                this.question = res;
+            }
+        } catch (error) {
+            console.error("Kunde inte hämta fråga:", error);
+            this.isLoading = false;
         }
     }
 
