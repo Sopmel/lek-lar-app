@@ -26,6 +26,10 @@ export interface ShapeGameViewModel {
     isPerfect: boolean;
     isLoading: boolean;
     isLoadingMessage: string;
+    answerFeedback?: {
+        selected: string;
+        correct: boolean;
+    } | null;
 }
 
 @injectable()
@@ -37,6 +41,8 @@ export class ShapesGamePresenter {
     sessionId: string = "";
     stars: number = 0;
     isLoading: boolean = true;
+    lastAnswer: string | null = null;
+    wasCorrect: boolean | null = null;
 
     constructor(
         @inject(ShapeGameApiService) private shapeGameApiService: ShapeGameApiService,
@@ -50,6 +56,8 @@ export class ShapesGamePresenter {
             sessionId: observable,
             stars: observable,
             isLoading: observable,
+            lastAnswer: observable,
+            wasCorrect: observable,
             viewModel: computed,
             startGame: action,
             fetchQuestion: action,
@@ -82,6 +90,12 @@ export class ShapesGamePresenter {
             isPerfect: this.stars === 5,
             isLoading: this.isLoading,
             isLoadingMessage: "Laddar fråga...",
+            answerFeedback: this.lastAnswer
+                ? {
+                    selected: this.lastAnswer,
+                    correct: this.wasCorrect ?? false,
+                }
+                : null,
         };
     }
 
@@ -126,6 +140,9 @@ export class ShapesGamePresenter {
         try {
             const res = await this.shapeGameApiService.submitAnswer(this.question.id, answer, this.sessionId);
 
+            this.lastAnswer = answer;
+            this.wasCorrect = res.correct;
+
             this.feedback = res.correct
                 ? this.viewModel.game.correctText
                 : this.viewModel.game.incorrectText;
@@ -138,6 +155,8 @@ export class ShapesGamePresenter {
             } else {
                 setTimeout(() => {
                     this.feedback = "";
+                    this.lastAnswer = null;
+                    this.wasCorrect = null;
                     this.fetchQuestion();
                 }, 1000);
             }

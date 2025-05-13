@@ -46,13 +46,31 @@ export const ShapesGame = observer(() => {
         <PageLayout>
             <Flex justify="center" align="center" style={{ padding: "32px 0" }}>
                 <Card title={vm.game.gameTitle} headerBgColor="pink">
-                    <Flex justify="center" style={{ marginBottom: 32 }}>
-                        <img
-                            src={`images/gameImages/shapes/${question.shapeImageUrl}`}
-                            alt="Visad form"
-                            width={120}
-                        />
+                    <Flex justify="center" align="center" style={{ marginBottom: 32, gap: 12 }}>
+                        <div style={{ position: "relative", display: "inline-block" }}>
+                            <img
+                                src={`images/gameImages/shapes/${question.shapeImageUrl}`}
+                                alt="Visad form"
+                                width={120}
+                            />
+                            {vm.answerFeedback && (
+                                <div style={{
+                                    position: "absolute",
+                                    top: -8,
+                                    right: -8,
+                                    fontSize: "1.75rem",
+                                    backgroundColor: vm.answerFeedback.correct ? "#d4edda" : "#f8d7da",
+                                    color: vm.answerFeedback.correct ? "#155724" : "#721c24",
+                                    borderRadius: 8,
+                                    padding: "2px 6px",
+                                    fontWeight: "bold",
+                                }}>
+                                    {vm.answerFeedback.correct ? "✓" : "✗"}
+                                </div>
+                            )}
+                        </div>
                     </Flex>
+
 
                     <Flex justify="center" gap={20} style={{ flexWrap: "wrap" }}>
                         {vm.options.map((opt) => (

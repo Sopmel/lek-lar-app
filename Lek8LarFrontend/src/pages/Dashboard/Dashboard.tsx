@@ -6,14 +6,16 @@ import { PageLayout } from "../../components/PageLayout/PageLayout";
 import { AccessibleCard, Card, GameRow } from "../../components/LekLarComponentLibrary";
 import { usePresenter } from "../../hooks/usePresenter";
 
-
-
 const Dashboard = () => {
     const presenter = usePresenter(DashboardPresenter);
     const vm = presenter.viewModel;
     const navigate = useNavigate();
     const progress = useInjection<GameProgressManager>(GameProgressManager);
     const countGameStars = progress.getStars("CountGame", 1) ?? 0;
+    const shapeGameStars = progress.getStars("ShapesGame", 1) ?? 0;
+    const plusGameStars = progress.getStars("PlusGame", 1) ?? 0;
+    const letterHuntStars = progress.getStars("LetterHunt", 1) ?? 0;
+    const wordMatchStars = progress.getStars("WordMatch", 1) ?? 0;
 
 
 
@@ -33,15 +35,15 @@ const Dashboard = () => {
                     <AccessibleCard
                         hoverable
                         title="⭐ Formjakten"
-                        description={`Stjärnor: ${"⭐".repeat(countGameStars).padEnd(5, "☆")}`}
+                        description={`Stjärnor: ${"⭐".repeat(shapeGameStars).padEnd(5, "☆")}`}
                         onClick={() => navigate("/shapes")}
                         style={{ width: 240, minHeight: 180 }}
                     />
                     <AccessibleCard
                         hoverable
-                        title="➕ Pluss tal"
-                        description="Träna enkla additioner."
-                        onClick={() => navigate("/math")}
+                        title="➕ Plus tal"
+                        description={`Stjärnor: ${"⭐".repeat(plusGameStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/plus")}
                         style={{ width: 240, minHeight: 180 }}
                     />
 
@@ -52,15 +54,15 @@ const Dashboard = () => {
                     <AccessibleCard
                         hoverable
                         title="🔤 Bokstäver"
-                        description="Lär dig stava genom roliga utmaningar."
-                        onClick={() => navigate("/spelling")}
+                        description={`Stjärnor: ${"⭐".repeat(letterHuntStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/letters")}
                         style={{ width: 240, minHeight: 180 }}
                     />
                     <AccessibleCard
                         hoverable
                         title="📚 Ord"
-                        description="Träna ordförståelse."
-                        onClick={() => navigate("/spelling")}
+                        description={`Stjärnor: ${"⭐".repeat(wordMatchStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/wordmatch")}
                         style={{ width: 240, minHeight: 180 }}
                     />
                     <AccessibleCard

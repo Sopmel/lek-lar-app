@@ -4,8 +4,14 @@ import { CountGameApiService } from "../services/CountGameApiService";
 import { CountGamePresenter } from "../pages/Dashboard/Games/MathGames/LevelOne/CountGame/CountGamePresenter";
 import { ShapesGamePresenter } from "../pages/Dashboard/Games/MathGames/LevelOne/ShapesGame/ShapesGamePresenter";
 import { ShapeGameApiService } from "../services/ShapeGameApiService";
+import { PlusGamePresenter } from "../pages/Dashboard/Games/MathGames/LevelOne/PlusGame/PlusGamePresenter";
 import { GameProgressManager } from "../pages/Dashboard/Services/GameProgressManager/GameProgressManager";
 import DashboardPresenter from "../pages/Dashboard/DashboardPresenter";
+import { PlusGameApiService } from "../services/PlusGameApiService";
+import { LetterHuntApiService } from "../services/LetterHuntApiService";
+import { LetterHuntPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterHunt/LetterHuntPresenter";
+import { WordMatchApiService } from "../services/WordMatchApiService";
+import { WordMatchPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/WordMatchPresenter";
 
 const container = new Container();
 
@@ -13,6 +19,12 @@ container.bind(CountGameApiService).toSelf().inSingletonScope();
 container.bind(CountGamePresenter).toSelf();
 container.bind(ShapeGameApiService).toSelf().inSingletonScope();
 container.bind(ShapesGamePresenter).toSelf();
+container.bind(PlusGameApiService).toSelf().inSingletonScope();
+container.bind(PlusGamePresenter).toSelf();
+container.bind(LetterHuntApiService).toSelf().inSingletonScope();
+container.bind(LetterHuntPresenter).toSelf();
+container.bind(WordMatchApiService).toSelf().inSingletonScope();
+container.bind(WordMatchPresenter).toSelf();
 container.bind(GameProgressManager).toSelf().inSingletonScope();
 container.bind(DashboardPresenter).toSelf().inSingletonScope();
 
