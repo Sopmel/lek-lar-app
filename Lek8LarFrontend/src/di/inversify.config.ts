@@ -12,6 +12,8 @@ import { LetterHuntApiService } from "../services/LetterHuntApiService";
 import { LetterHuntPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterHunt/LetterHuntPresenter";
 import { WordMatchApiService } from "../services/WordMatchApiService";
 import { WordMatchPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/WordMatchPresenter";
+import { LetterBubblesApiService } from "../services/LetterBubblesApiService";
+import { LetterBubblesPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubblesPresenter";
 
 const container = new Container();
 
@@ -25,6 +27,8 @@ container.bind(LetterHuntApiService).toSelf().inSingletonScope();
 container.bind(LetterHuntPresenter).toSelf();
 container.bind(WordMatchApiService).toSelf().inSingletonScope();
 container.bind(WordMatchPresenter).toSelf();
+container.bind(LetterBubblesApiService).toSelf().inSingletonScope();
+container.bind(LetterBubblesPresenter).toSelf();
 container.bind(GameProgressManager).toSelf().inSingletonScope();
 container.bind(DashboardPresenter).toSelf().inSingletonScope();
 

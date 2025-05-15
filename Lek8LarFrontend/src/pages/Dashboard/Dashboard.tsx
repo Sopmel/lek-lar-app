@@ -16,6 +16,7 @@ const Dashboard = () => {
     const plusGameStars = progress.getStars("PlusGame", 1) ?? 0;
     const letterHuntStars = progress.getStars("LetterHunt", 1) ?? 0;
     const wordMatchStars = progress.getStars("WordMatch", 1) ?? 0;
+    const letterBubblesStars = progress.getStars("LetterBubbles", 1) ?? 0;
 
 
 
@@ -68,8 +69,8 @@ const Dashboard = () => {
                     <AccessibleCard
                         hoverable
                         title="✍️ Stava"
-                        description="Stavningsövningar."
-                        onClick={() => navigate("/spelling")}
+                        description={`Stjärnor: ${"⭐".repeat(letterBubblesStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/letterbubbles")}
                         style={{ width: 240, minHeight: 180 }}
                     />
 

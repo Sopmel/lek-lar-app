@@ -7,6 +7,7 @@ type PageLayoutProps = {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
     const navigate = useNavigate();
+    const isHomePage = location.pathname === "/";
 
     const handleLogout = () => {
         navigate("/");
@@ -23,12 +24,13 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
                 position: "relative",
             }}
         >
-            {/* Logga ut-knapp i hörnet */}
-            <div style={{ position: "absolute", top: 16, right: 16 }}>
-                <GameButton onClick={handleLogout} >
-                    Logga ut
-                </GameButton>
-            </div>
+            {!isHomePage && (
+                <div style={{ position: "absolute", top: 16, right: 16 }}>
+                    <GameButton onClick={handleLogout}>
+                        Logga ut
+                    </GameButton>
+                </div>
+            )}
 
             <div
                 style={{
