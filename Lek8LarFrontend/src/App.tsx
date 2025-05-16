@@ -8,6 +8,7 @@ import { PlusGame } from "./pages/Dashboard/Games/MathGames/LevelOne/PlusGame/Pl
 import { LetterHunt } from "./pages/Dashboard/Games/ABCGames/LevelOne/LetterHunt/LetterHunt";
 import { WordMatch } from "./pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/WordMatch";
 import { LetterBubbles } from "./pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubbles";
+import { MemoryGame } from "./pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGame";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
       <Route path="/letters" element={<LetterHunt />} />
       <Route path="/wordmatch" element={<WordMatch />} />
       <Route path="/letterbubbles" element={<LetterBubbles />} />
+      <Route path="/memorygame" element={<MemoryGame />} />
     </Routes>
 
   );

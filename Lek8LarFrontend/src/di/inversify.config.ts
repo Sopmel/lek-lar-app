@@ -14,6 +14,8 @@ import { WordMatchApiService } from "../services/WordMatchApiService";
 import { WordMatchPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/WordMatchPresenter";
 import { LetterBubblesApiService } from "../services/LetterBubblesApiService";
 import { LetterBubblesPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubblesPresenter";
+import { MemoryGamePresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGamePresenter";
+import { MemoryGameApiService } from "../services/MemoryGameApiService";
 
 const container = new Container();
 
@@ -29,6 +31,8 @@ container.bind(WordMatchApiService).toSelf().inSingletonScope();
 container.bind(WordMatchPresenter).toSelf();
 container.bind(LetterBubblesApiService).toSelf().inSingletonScope();
 container.bind(LetterBubblesPresenter).toSelf();
+container.bind(MemoryGameApiService).toSelf().inSingletonScope();
+container.bind(MemoryGamePresenter).toSelf();
 container.bind(GameProgressManager).toSelf().inSingletonScope();
 container.bind(DashboardPresenter).toSelf().inSingletonScope();
 
