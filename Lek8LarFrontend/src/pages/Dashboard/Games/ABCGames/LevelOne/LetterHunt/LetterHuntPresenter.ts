@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import { LetterHuntApiService } from "../../../../../../services/LetterHuntApiService";
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 import { LetterQuestion, GameResult } from "./LetterHuntTypes";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface LetterHuntViewModel {
     imageUrl: string;
@@ -122,11 +123,13 @@ export class LetterHuntPresenter {
             this.progress.setStars("LetterHunt", this.level, res.stars);
         } else {
             this.question = res;
+            SpeechHelper.speak(`Vilken bokstav börjar ordet på?`);
         }
     }
 
     async submitAnswer(answer: string) {
         const res = await this.letterHuntApiService.submitAnswer(this.sessionId, answer);
+
         this.stars = res.stars;
         this.isCorrectAnswer = res.correct;
         this.showAnswerFeedback = true;
@@ -137,9 +140,10 @@ export class LetterHuntPresenter {
 
         if (res.gameOver) {
             setTimeout(() => {
-                this.gameOver = true;
                 this.progress.setStars("LetterHunt", this.level, res.stars);
-            }, 1200);
+                this.gameOver = true;
+                this.question = null;
+            }, 1000);
         } else {
             setTimeout(() => {
                 this.feedback = "";
@@ -147,6 +151,9 @@ export class LetterHuntPresenter {
             }, 1000);
         }
     }
+
+
+
 
     private isGameResult(res: any): res is GameResult {
         return typeof res.gameOver === "boolean" && typeof res.stars === "number";

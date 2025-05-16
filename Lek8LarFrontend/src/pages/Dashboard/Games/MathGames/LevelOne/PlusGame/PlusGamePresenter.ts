@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import { PlusGameApiService } from "../../../../../../services/PlusGameApiService";
 import { Question, GameResult } from "./PlusGameTypes";
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface PlusGameViewModel {
     groupAImages: { key: string; src: string; alt: string }[];
@@ -172,6 +173,7 @@ export class PlusGamePresenter {
 
             } else {
                 this.question = res;
+                SpeechHelper.speak(`Hur många ser du totalt?`);
             }
         } catch (error) {
             console.error(error);

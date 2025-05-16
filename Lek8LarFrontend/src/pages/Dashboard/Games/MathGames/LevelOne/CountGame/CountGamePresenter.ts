@@ -6,6 +6,7 @@ import {
     GameResult,
 } from "./CountGameTypes";
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface CountGameViewModel {
     imageElements: { key: number; src: string; alt: string }[];
@@ -166,12 +167,29 @@ export class CountGamePresenter {
                 }
             } else {
                 this.question = res;
+                const pluralName = this.getImageName(res.objectImageUrl);
+                SpeechHelper.speak(`Hur många ${pluralName} ser du?`);
             }
         } catch (error) {
             console.error("Kunde inte hämta fråga:", error);
             this.isLoading = false;
         }
     }
+
+    private getImageName(imageUrl?: string): string {
+        if (!imageUrl) return "saker";
+
+        const baseName = imageUrl.split(".")[0];
+
+        const pluralMap: Record<string, string> = {
+            apple: "äpplen",
+            banana: "bananer",
+            ball: "bollar",
+        };
+
+        return pluralMap[baseName] ?? baseName + "er";
+    }
+
 
     private isGameResult(res: any): res is GameResult {
         return typeof res.gameOver === "boolean" && typeof res.stars === "number";

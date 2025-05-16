@@ -96,14 +96,14 @@ const HomePage = () => {
                 </Card>
             </main>
 
-            <Modal open={isLoginOpen} onClose={() => navigate("/")} title="Logga in">
+            <Modal open={isLoginOpen} onClose={() => navigate("/")}>
                 <LoginPage
                     onClose={() => navigate("/")}
                     onSuccess={() => navigate("/dashboard")}
                 />
             </Modal>
 
-            <Modal open={isRegisterOpen} onClose={() => navigate("/")} title="Registrera">
+            <Modal open={isRegisterOpen} onClose={() => navigate("/")}>
                 <RegisterPage onClose={() => navigate("/")} />
             </Modal>
         </PageLayout>
