@@ -1,13 +1,23 @@
+import { apiService } from "./ApiService";
 import { LetterBubbleQuestion } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubblesTypes";
 
 export class LetterBubblesApiService {
-    async getQuestions(): Promise<LetterBubbleQuestion[]> {
+    sessionId: string = "";
 
-        return [
-            { targetLetter: "A", options: ["A", "B", "C"] },
-            { targetLetter: "M", options: ["N", "M", "L"] },
-            { targetLetter: "Z", options: ["X", "Y", "Z"] },
-        ];
+    async startGame(): Promise<void> {
+        const res = await apiService.post("letterbubble/start") as { sessionId: string };
+        this.sessionId = res.sessionId;
+    }
+
+    async getQuestion(): Promise<LetterBubbleQuestion> {
+        return apiService.get("letterbubble/question", { sessionId: this.sessionId });
+    }
+
+    async submitAnswer(answer: string): Promise<LetterBubbleQuestion> {
+        return apiService.post("letterbubble/answer", {
+            sessionId: this.sessionId,
+            answer,
+        });
     }
 
     async sendProgress(result: {
@@ -16,15 +26,6 @@ export class LetterBubblesApiService {
         gameOver: boolean;
         levelCleared: boolean;
     }) {
-        await fetch("/api/letterbubble/progress", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(result),
-        });
+        await apiService.post("letterbubble/progress", result);
     }
 }
-
-
-
-
-

@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import { ShapeGameApiService } from "../../../../../../services/ShapeGameApiService";
 import { ShapeQuestion, GameResult } from "./ShapesGameTypes";
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface ShapeGameViewModel {
     imageUrl: string;
@@ -128,6 +129,8 @@ export class ShapesGamePresenter {
                 this.gameProgressManager.setStars("ShapesGame", this.level, res.stars);
             } else {
                 this.question = res;
+
+                SpeechHelper.speak(`Vilken form är detta?`);
             }
         } catch (error) {
             console.error("Kunde inte hämta fråga:", error);

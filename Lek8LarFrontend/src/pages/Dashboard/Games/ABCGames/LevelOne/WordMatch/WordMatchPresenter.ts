@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import { WordMatchApiService } from "../../../../../../services/WordMatchApiService";
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 import { MatchQuestion, GameResult } from "./WordMatchTypes";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface WordMatchViewModel {
     mainImage: string;
@@ -120,6 +121,7 @@ export class WordMatchPresenter {
             this.progress.setStars("WordMatch", this.level, res.stars);
         } else {
             this.question = res;
+            SpeechHelper.speak("Vad hör ihop med bilden?");
         }
     }
 

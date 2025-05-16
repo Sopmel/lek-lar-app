@@ -16,7 +16,7 @@ const Dashboard = () => {
     const plusGameStars = progress.getStars("PlusGame", 1) ?? 0;
     const letterHuntStars = progress.getStars("LetterHunt", 1) ?? 0;
     const wordMatchStars = progress.getStars("WordMatch", 1) ?? 0;
-    const letterBubblesStars = progress.getStars("LetterBubbles", 1) ?? 0;
+    const letterBubblesStars = progress.getStars("LetterBubbleGame", 1) ?? 0;
 
 
 
