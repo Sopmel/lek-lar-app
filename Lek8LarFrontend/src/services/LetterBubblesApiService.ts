@@ -20,12 +20,14 @@ export class LetterBubblesApiService {
         });
     }
 
-    async sendProgress(result: {
-        level: number;
-        stars: number;
-        gameOver: boolean;
-        levelCleared: boolean;
-    }) {
-        await apiService.post("letterbubble/progress", result);
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
+            gameKey: "LetterBubbles",
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
+        });
     }
+
 }

@@ -18,4 +18,15 @@ export class PlusGameApiService {
     ): Promise<Question> {
         return apiService.post("plusgame/answer", { sessionId, answer });
     }
+
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
+            gameKey: "PlusGame",
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
+        });
+    }
+
 }

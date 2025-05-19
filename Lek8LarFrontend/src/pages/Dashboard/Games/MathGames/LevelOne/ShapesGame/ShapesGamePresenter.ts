@@ -155,6 +155,7 @@ export class ShapesGamePresenter {
             if (res.gameOver) {
                 this.gameOver = true;
                 this.gameProgressManager.setStars("ShapesGame", this.level, res.stars);
+                await this.shapeGameApiService.sendProgress(this.level, this.stars);
             } else {
                 setTimeout(() => {
                     this.feedback = "";

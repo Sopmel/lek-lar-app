@@ -42,9 +42,11 @@ export class LetterBubblesPresenter {
     isAnswerCorrect: boolean | null = null;
     gameOver = false;
     isLoading = true;
+    level = 1;
+    stars = 0;
 
     constructor(
-        @inject(LetterBubblesApiService) private api: LetterBubblesApiService,
+        @inject(LetterBubblesApiService) private letterBubbleApiService: LetterBubblesApiService,
         @inject(GameProgressManager) private gameProgressManager: GameProgressManager
     ) {
         makeObservable(this, {
@@ -103,31 +105,26 @@ export class LetterBubblesPresenter {
         this.currentQuestion = null;
         this.isLoading = true;
 
-        await this.api.startGame();
+        await this.letterBubbleApiService.startGame();
         await this.fetchNextQuestion();
     }
 
     async fetchNextQuestion() {
-        const question = await this.api.getQuestion();
+        const question = await this.letterBubbleApiService.getQuestion();
 
         if (question.gameResult?.gameOver) {
             this.gameOver = true;
 
-            const stars = question.gameResult.stars;
-            const level = question.gameResult.level;
-            const levelCleared = question.gameResult.levelCleared;
-            this.gameProgressManager.setStars("LetterBubbleGame", level, stars);
+            this.stars = question.gameResult.stars;
+            this.level = question.gameResult.level;
 
-            await this.api.sendProgress({
-                level,
-                stars,
-                gameOver: true,
-                levelCleared,
-            });
+            this.gameProgressManager.setStars("LetterBubbleGame", this.level, this.stars);
+            await this.letterBubbleApiService.sendProgress(this.level, this.stars);
 
             this.isLoading = false;
             return;
         }
+
 
         this.currentQuestion = question;
         this.isLoading = false;
@@ -138,7 +135,7 @@ export class LetterBubblesPresenter {
     async answer(letter: string) {
         if (!this.currentQuestion) return;
 
-        const res = await this.api.submitAnswer(letter);
+        const res = await this.letterBubbleApiService.submitAnswer(letter);
         const wasCorrect = res.gameResult?.correct ?? false;
 
         this.isAnswerCorrect = wasCorrect;

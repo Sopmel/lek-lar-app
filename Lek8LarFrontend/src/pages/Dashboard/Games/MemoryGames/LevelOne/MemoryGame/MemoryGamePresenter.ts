@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
-import { GameProgressManager } from "../../../../Dashboard/Services/GameProgressManager/GameProgressManager";
+import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 import { inject, injectable } from "inversify";
-import { MemoryGameApiService } from "../../../../../services/MemoryGameApiService";
+import { MemoryGameApiService } from "../../../../../../services/MemoryGameApiService";
 
 
 export interface MemoryGameViewModel {
@@ -49,7 +49,7 @@ export class MemoryGamePresenter {
 
     constructor(
         @inject(GameProgressManager) private progress: GameProgressManager,
-        @inject(MemoryGameApiService) private api: MemoryGameApiService,
+        @inject(MemoryGameApiService) private memoryGameApiService: MemoryGameApiService,
     ) {
         makeObservable(this, {
             cards: observable,
@@ -125,7 +125,7 @@ export class MemoryGamePresenter {
                 if (this.matchedPairs === 5) {
                     this.gameOver = true;
                     this.progress.setStars("MemoryGame", 1, 5);
-                    await this.sendProgress();
+                    await this.memoryGameApiService.sendProgress(1, 5);
                 }
             } else {
                 setTimeout(() => {
@@ -136,14 +136,4 @@ export class MemoryGamePresenter {
             }
         }
     }
-
-    private async sendProgress() {
-        await this.api.sendProgress({
-            level: 1,
-            stars: this.matchedPairs,
-            gameOver: true,
-            levelCleared: this.matchedPairs === 5,
-        });
-    }
-
 }

@@ -17,5 +17,16 @@ export class CountGameApiService {
         });
     }
 
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
+            gameKey: "CountGame",
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
+        });
+    }
+
+
 }
 
