@@ -138,9 +138,10 @@ export class WordMatchPresenter {
             : this.viewModel.game.incorrectText;
 
         if (res.gameOver) {
-            setTimeout(() => {
+            setTimeout(async () => {
                 this.gameOver = true;
                 this.progress.setStars("WordMatch", this.level, res.stars);
+                await this.wordMatchApiService.sendProgress(this.level, this.stars);
             }, 1200);
         } else {
             setTimeout(() => {

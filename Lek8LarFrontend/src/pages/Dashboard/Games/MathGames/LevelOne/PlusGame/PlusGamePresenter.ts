@@ -46,7 +46,7 @@ export class PlusGamePresenter {
     isCorrectAnswer: boolean | null = null;
 
     constructor(
-        @inject(PlusGameApiService) private api: PlusGameApiService,
+        @inject(PlusGameApiService) private plusGameApiService: PlusGameApiService,
         @inject(GameProgressManager) private progress: GameProgressManager
     ) {
         makeObservable(this, {
@@ -114,7 +114,7 @@ export class PlusGamePresenter {
         this.resetState();
 
         try {
-            const res = await this.api.startGame(this.level);
+            const res = await this.plusGameApiService.startGame(this.level);
             this.sessionId = res.sessionId;
             await this.fetchQuestion();
         } catch (error) {
@@ -127,7 +127,7 @@ export class PlusGamePresenter {
         if (!this.sessionId) return;
 
         try {
-            const res = await this.api.submitAnswer(this.sessionId, answer);
+            const res = await this.plusGameApiService.submitAnswer(this.sessionId, answer);
 
             const isCorrect = answer === res.correctAnswer;
             this.isCorrectAnswer = isCorrect;
@@ -139,10 +139,11 @@ export class PlusGamePresenter {
             this.question = res;
 
             if (res.gameResult?.gameOver) {
-                setTimeout(() => {
+                setTimeout(async () => {
                     this.gameOver = true;
                     this.stars = res.gameResult!.stars;
                     this.progress.setStars("PlusGame", this.level, res.gameResult!.stars);
+                    await this.plusGameApiService.sendProgress(this.level, this.stars);
                 }, 1200);
             } else {
                 setTimeout(() => {
@@ -162,7 +163,7 @@ export class PlusGamePresenter {
         this.isLoading = true;
 
         try {
-            const res = await this.api.fetchQuestion(this.sessionId);
+            const res = await this.plusGameApiService.fetchQuestion(this.sessionId);
             this.isLoading = false;
             this.showAnswerFeedback = false;
             this.isCorrectAnswer = null;

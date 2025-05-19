@@ -8,6 +8,7 @@ import {
 import { GameProgressManager } from "../../../../Services/GameProgressManager/GameProgressManager";
 import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
+
 export interface CountGameViewModel {
     imageElements: { key: number; src: string; alt: string }[];
     options: number[];
@@ -134,6 +135,8 @@ export class CountGamePresenter {
                     this.level = res.level;
                 }
                 this.gameProgressManager.setStars("CountGame", this.level, res.stars);
+                await this.countGameApiService.sendProgress(this.level, this.stars);
+
             } else {
                 this.feedback = res.correct
                     ? this.viewModel.game.correctText
@@ -189,7 +192,6 @@ export class CountGamePresenter {
 
         return pluralMap[baseName] ?? baseName + "er";
     }
-
 
     private isGameResult(res: any): res is GameResult {
         return typeof res.gameOver === "boolean" && typeof res.stars === "number";

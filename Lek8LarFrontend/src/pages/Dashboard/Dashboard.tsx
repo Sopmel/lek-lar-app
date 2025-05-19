@@ -1,29 +1,40 @@
 import { useNavigate } from "react-router-dom";
-import { useInjection } from "inversify-react";
-import { GameProgressManager } from "../Dashboard/Services/GameProgressManager/GameProgressManager";
 import { DashboardPresenter } from "./DashboardPresenter";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
-import { AccessibleCard, Card, GameRow } from "../../components/LekLarComponentLibrary";
+import { AccessibleCard, Card, GameRow, Flex } from "../../components/LekLarComponentLibrary";
 import { usePresenter } from "../../hooks/usePresenter";
+import { observer } from "mobx-react-lite";
+import { DashboardHeader } from "./DashboardHeader";
 
-const Dashboard = () => {
+const Dashboard = observer(() => {
     const presenter = usePresenter(DashboardPresenter);
     const vm = presenter.viewModel;
     const navigate = useNavigate();
-    const progress = useInjection<GameProgressManager>(GameProgressManager);
-    const countGameStars = progress.getStars("CountGame", 1) ?? 0;
-    const shapeGameStars = progress.getStars("ShapesGame", 1) ?? 0;
-    const plusGameStars = progress.getStars("PlusGame", 1) ?? 0;
-    const letterHuntStars = progress.getStars("LetterHunt", 1) ?? 0;
-    const wordMatchStars = progress.getStars("WordMatch", 1) ?? 0;
-    const letterBubblesStars = progress.getStars("LetterBubbleGame", 1) ?? 0;
-    const memoryGameStars = progress.getStars("MemoryGame", 1) ?? 0;
+    const countGameStars = vm.starsPerGame.CountGame ?? 0;
+    const shapeGameStars = vm.starsPerGame.ShapesGame ?? 0;
+    const plusGameStars = vm.starsPerGame.PlusGame ?? 0;
+    const letterHuntStars = vm.starsPerGame.LetterHunt ?? 0;
+    const wordMatchStars = vm.starsPerGame.WordMatch ?? 0;
+    const letterBubblesStars = vm.starsPerGame.LetterBubbleGame ?? 0;
+    const memoryGameStars = vm.starsPerGame.MemoryGame ?? 0;
+    const whatsMissingStars = vm.starsPerGame.WhatsMissing ?? 0;
+    console.log("Dashboard stars", vm.starsPerGame);
+
+
 
 
 
     return (
         <PageLayout>
+
             <Card title={vm.cardTitle}>
+
+                <DashboardHeader
+                    playerName={vm.playerName}
+                    level={vm.currentLevel}
+                    totalStars={vm.totalStars}
+                />
+
                 <GameRow title={vm.mathGameRowTitle} backgroundColor="#ffe6f0">
 
                     <AccessibleCard
@@ -95,9 +106,9 @@ const Dashboard = () => {
                     />
                     <AccessibleCard
                         hoverable
-                        title="🧠 Memory 3"
-                        description="Tredje memoryspelet."
-                        onClick={() => navigate("/math")}
+                        title="🧠 Vad saknas?"
+                        description={`Stjärnor: ${"⭐".repeat(whatsMissingStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/whatsmissing")}
                         style={{ width: 240, minHeight: 180 }}
                     />
 
@@ -105,6 +116,6 @@ const Dashboard = () => {
             </Card>
         </PageLayout>
     );
-};
+});
 
 export default Dashboard;

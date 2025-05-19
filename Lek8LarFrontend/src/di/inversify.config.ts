@@ -14,8 +14,11 @@ import { WordMatchApiService } from "../services/WordMatchApiService";
 import { WordMatchPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/WordMatchPresenter";
 import { LetterBubblesApiService } from "../services/LetterBubblesApiService";
 import { LetterBubblesPresenter } from "../pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubblesPresenter";
-import { MemoryGamePresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGamePresenter";
+import { MemoryGamePresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGame/MemoryGamePresenter";
 import { MemoryGameApiService } from "../services/MemoryGameApiService";
+import { DashboardApiService } from "../services/DashboardApiService";
+import { WhatsMissingApiService } from "../services/WhatsMissingApiService";
+import { WhatsMissingPresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/WhatsMissing/WhatsMissingPresenter";
 
 const container = new Container();
 
@@ -33,8 +36,12 @@ container.bind(LetterBubblesApiService).toSelf().inSingletonScope();
 container.bind(LetterBubblesPresenter).toSelf();
 container.bind(MemoryGameApiService).toSelf().inSingletonScope();
 container.bind(MemoryGamePresenter).toSelf();
+container.bind(WhatsMissingApiService).toSelf().inSingletonScope();
+container.bind(WhatsMissingPresenter).toSelf();
 container.bind(GameProgressManager).toSelf().inSingletonScope();
-container.bind(DashboardPresenter).toSelf().inSingletonScope();
+container.bind(DashboardPresenter).toSelf()
+container.bind(DashboardApiService).toSelf().inSingletonScope();
+
 
 
 export { container };

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import { usePresenter } from "../../../../../hooks/usePresenter";
-import { Text, Title, PageLayout, Card, GameButton, Flex } from "../../../../../components/LekLarComponentLibrary";
+import { usePresenter } from "../../../../../../hooks/usePresenter";
+import { Text, Title, PageLayout, Card, GameButton, Flex } from "../../../../../../components/LekLarComponentLibrary";
 import { MemoryGamePresenter } from "./MemoryGamePresenter";
 import styles from "./MemoryGame.module.css";
 

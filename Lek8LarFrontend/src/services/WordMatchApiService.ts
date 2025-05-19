@@ -19,4 +19,15 @@ export class WordMatchApiService {
             answer: answerImageUrl,
         });
     }
+
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
+            gameKey: "WordMatch",
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
+        });
+    }
+
 }

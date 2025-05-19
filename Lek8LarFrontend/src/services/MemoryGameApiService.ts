@@ -1,5 +1,5 @@
 import { apiService } from "./ApiService";
-import { MemoryCard } from "../pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGamePresenter";
+import { MemoryCard } from "../pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGame/MemoryGamePresenter";
 
 export class MemoryGameApiService {
     sessionId: string = "";
@@ -13,15 +13,13 @@ export class MemoryGameApiService {
         return apiService.get("memorygame/cards", { sessionId: this.sessionId });
     }
 
-    async sendProgress(result: {
-        level: number;
-        stars: number;
-        gameOver: boolean;
-        levelCleared: boolean;
-    }) {
-        await apiService.post("progress", {
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
             gameKey: "MemoryGame",
-            ...result,
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
         });
     }
 

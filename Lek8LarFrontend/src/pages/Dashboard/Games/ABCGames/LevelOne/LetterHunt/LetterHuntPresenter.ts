@@ -121,6 +121,7 @@ export class LetterHuntPresenter {
             this.stars = res.stars;
             this.gameOver = true;
             this.progress.setStars("LetterHunt", this.level, res.stars);
+            await this.letterHuntApiService.sendProgress(this.level, res.stars);
         } else {
             this.question = res;
             SpeechHelper.speak(`Vilken bokstav börjar ordet på?`);

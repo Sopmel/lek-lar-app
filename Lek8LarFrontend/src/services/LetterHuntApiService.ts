@@ -16,4 +16,15 @@ export class LetterHuntApiService {
             answer,
         });
     }
+
+    public async sendProgress(level: number, stars: number) {
+        return apiService.post("progress", {
+            gameKey: "LetterHunt",
+            level,
+            stars,
+            gameOver: true,
+            levelCleared: stars === 5,
+        });
+    }
+
 }
