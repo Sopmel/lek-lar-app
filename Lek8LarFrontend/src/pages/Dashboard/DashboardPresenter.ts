@@ -25,6 +25,7 @@ interface StarsPerGameVm {
     WordMatch: number;
     LetterBubbleGame: number;
     MemoryGame: number;
+    ColorMixGame: number;
     WhatsMissing: number;
 }
 
@@ -60,6 +61,7 @@ export class DashboardPresenter {
             WordMatch: progress.WordMatch ?? 0,
             LetterBubbleGame: progress.LetterBubbleGame ?? 0,
             MemoryGame: progress.MemoryGame ?? 0,
+            ColorMixGame: progress.ColorMixGame ?? 0,
             WhatsMissing: progress.WhatsMissing ?? 0,
         };
 

@@ -1,7 +1,8 @@
-import { makeObservable, observable, computed, action } from "mobx";
-import { inject, injectable } from "inversify";
+import { makeObservable, observable, computed, action, set } from "mobx";
+import { inject } from "inversify";
 import { WhatsMissingApiService } from "../../../../../../services/WhatsMissingApiService";
-import { WhatsMissingQuestion, GameResult } from "./WhatsMissingTypes";
+import { WhatsMissingQuestion } from "./WhatsMissingTypes";
+import { SpeechHelper } from "../../../../../../utils/SpeechHelper";
 
 export interface WhatsMissingViewModel {
     visibleImages: string[];
@@ -87,6 +88,8 @@ export class WhatsMissingPresenter {
         this.round = 0;
         this.answerFeedback = "";
         this.gameOver = false;
+        SpeechHelper.speak("Titta noga på bilderna!");
+
         const response = await this.whatsMissingApiService.startGame();
         this.sessionId = response.sessionId;
         await this.fetchQuestion();
@@ -96,13 +99,18 @@ export class WhatsMissingPresenter {
         this.question = await this.whatsMissingApiService.fetchQuestion(this.sessionId);
         this.answerFeedback = "";
         this.showingFullSet = true;
+        SpeechHelper.speak("kom ihåg bilderna.");
+        setTimeout(() => {
+            SpeechHelper.speak("titta noga, vilken bild är borta?.");
+        }
+            , 2000);
 
         setTimeout(() => {
             this.showingFullSet = false;
         }, 2000);
     }
 
-    async submitAnswer(answer: string) {
+    public async submitAnswer(answer: string) {
         const res = await this.whatsMissingApiService.submitAnswer(this.sessionId, answer);
         const wasCorrect = answer === this.question?.correctAnswer;
 
@@ -126,11 +134,16 @@ export class WhatsMissingPresenter {
             return;
         }
 
-        // Visa feedback i 1 sekund innan nästa fråga
+
         setTimeout(async () => {
             await this.fetchQuestion();
         }, 1000);
     }
+
+    private delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
 
     public hideFullSet() {
         this.showingFullSet = false;
