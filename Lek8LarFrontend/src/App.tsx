@@ -10,6 +10,7 @@ import { WordMatch } from "./pages/Dashboard/Games/ABCGames/LevelOne/WordMatch/W
 import { LetterBubbles } from "./pages/Dashboard/Games/ABCGames/LevelOne/LetterBubbles/LetterBubbles";
 import { MemoryGame } from "./pages/Dashboard/Games/MemoryGames/LevelOne/MemoryGame/MemoryGame";
 import { WhatsMissing } from "./pages/Dashboard/Games/MemoryGames/LevelOne/WhatsMissing/WhatsMissing";
+import { ColorMixGame } from "./pages/Dashboard/Games/MemoryGames/LevelOne/ColorMixGame/ColorMixGame";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
       <Route path="/wordmatch" element={<WordMatch />} />
       <Route path="/letterbubbles" element={<LetterBubbles />} />
       <Route path="/memorygame" element={<MemoryGame />} />
+      <Route path="/colormix" element={<ColorMixGame />} />
       <Route path="/whatsmissing" element={<WhatsMissing />} />
     </Routes>
 

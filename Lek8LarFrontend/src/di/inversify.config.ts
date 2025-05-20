@@ -19,6 +19,8 @@ import { MemoryGameApiService } from "../services/MemoryGameApiService";
 import { DashboardApiService } from "../services/DashboardApiService";
 import { WhatsMissingApiService } from "../services/WhatsMissingApiService";
 import { WhatsMissingPresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/WhatsMissing/WhatsMissingPresenter";
+import { ColorMixGamePresenter } from "../pages/Dashboard/Games/MemoryGames/LevelOne/ColorMixGame/ColorMixGamePresenter";
+import { ColorMixApiService } from "../services/ColorMixApiService";
 
 const container = new Container();
 
@@ -36,6 +38,8 @@ container.bind(LetterBubblesApiService).toSelf().inSingletonScope();
 container.bind(LetterBubblesPresenter).toSelf();
 container.bind(MemoryGameApiService).toSelf().inSingletonScope();
 container.bind(MemoryGamePresenter).toSelf();
+container.bind(ColorMixApiService).toSelf().inSingletonScope();
+container.bind(ColorMixGamePresenter).toSelf();
 container.bind(WhatsMissingApiService).toSelf().inSingletonScope();
 container.bind(WhatsMissingPresenter).toSelf();
 container.bind(GameProgressManager).toSelf().inSingletonScope();

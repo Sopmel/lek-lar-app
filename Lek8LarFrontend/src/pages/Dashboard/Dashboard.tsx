@@ -17,6 +17,7 @@ const Dashboard = observer(() => {
     const wordMatchStars = vm.starsPerGame.WordMatch ?? 0;
     const letterBubblesStars = vm.starsPerGame.LetterBubbleGame ?? 0;
     const memoryGameStars = vm.starsPerGame.MemoryGame ?? 0;
+    const colorMixStars = vm.starsPerGame.ColorMixGame ?? 0;
     const whatsMissingStars = vm.starsPerGame.WhatsMissing ?? 0;
     console.log("Dashboard stars", vm.starsPerGame);
 
@@ -99,9 +100,9 @@ const Dashboard = observer(() => {
                     />
                     <AccessibleCard
                         hoverable
-                        title="🧠 Memory 2"
-                        description="Var uppmärksam och matcha rätt."
-                        onClick={() => navigate("/math")}
+                        title="🎨 Blanda färger"
+                        description={`Stjärnor: ${"⭐".repeat(colorMixStars).padEnd(5, "☆")}`}
+                        onClick={() => navigate("/colormix")}
                         style={{ width: 240, minHeight: 180 }}
                     />
                     <AccessibleCard
