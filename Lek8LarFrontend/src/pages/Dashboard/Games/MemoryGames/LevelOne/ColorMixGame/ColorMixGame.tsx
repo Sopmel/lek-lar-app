@@ -100,15 +100,29 @@ export const ColorMixGame = observer(() => {
                 <Flex justify="center" align="center" style={{ marginTop: 24, gap: 32 }}>
                     <Flex direction="column" align="center">
                         {renderPaintBlob(vm.color1)}
-                        <span style={{ marginTop: 8, fontWeight: "bold", fontSize: 18, color: vm.color1 }}>
-                            {vm.color1.charAt(0).toUpperCase() + vm.color1.slice(1)}
+                        <span style={{
+                            marginTop: 8,
+                            fontWeight: "bold",
+                            fontSize: 18,
+                            color: "black",
+                            textShadow: "0 1px 2px rgba(255,255,255,0.6)",
+                        }}>
+                            {vm.color1Name}
+
                         </span>
                     </Flex>
                     <span style={{ fontSize: 32, fontWeight: "bold" }}>+</span>
                     <Flex direction="column" align="center">
                         {renderPaintBlob(vm.color2)}
-                        <span style={{ marginTop: 8, fontWeight: "bold", fontSize: 18, color: vm.color2 }}>
-                            {vm.color2.charAt(0).toUpperCase() + vm.color2.slice(1)}
+                        <span style={{
+                            marginTop: 8,
+                            fontWeight: "bold",
+                            fontSize: 18,
+                            color: "black",
+                            textShadow: "0 1px 2px rgba(255,255,255,0.6)",
+                        }}>
+                            {vm.color2Name}
+
                         </span>
                     </Flex>
                 </Flex>
@@ -131,7 +145,8 @@ export const ColorMixGame = observer(() => {
                                 </span>
                             </div>
                             <div style={{ marginTop: 8, fontWeight: "bold", fontSize: 18 }}>
-                                {vm.selectedAnswer}
+                                {presenter.colorNameMap[vm.selectedAnswer ?? ""] ?? vm.selectedAnswer}
+
                             </div>
                         </>
                     )}
@@ -165,8 +180,9 @@ export const ColorMixGame = observer(() => {
                                         filter: "blur(1px)",
                                     }} />
                                 </button>
-                                <span style={{ marginTop: 8, fontWeight: "bold", color: "#444" }}>
-                                    {color.charAt(0).toUpperCase() + color.slice(1)}
+                                <span style={{ marginTop: 8, fontWeight: "bold", color: "#black" }}>
+                                    {presenter.colorNameMap[color] ?? color}
+
                                 </span>
                             </Flex>
                         ))}

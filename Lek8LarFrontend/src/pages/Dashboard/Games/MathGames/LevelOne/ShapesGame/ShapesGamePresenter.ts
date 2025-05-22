@@ -127,6 +127,7 @@ export class ShapesGamePresenter {
                 this.question = null;
 
                 this.gameProgressManager.setStars("ShapesGame", this.level, res.stars);
+                await this.shapeGameApiService.sendProgress(this.level, this.stars);
             } else {
                 this.question = res;
 

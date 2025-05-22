@@ -128,7 +128,7 @@ export class ColorMixGamePresenter {
         }, 1000);
     }
 
-    private readonly colorNameMap: Record<string, string> = {
+    public readonly colorNameMap: Record<string, string> = {
         red: "Röd",
         yellow: "Gul",
         blue: "Blå",
